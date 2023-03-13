@@ -1,20 +1,26 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { useContext, useEffect, useState } from 'react'
+import { NavigationContainer } from '@react-navigation/native'
+
+import { Provider as AuthProvider, Context as AuthContext } from "./src/context/AuthContext"
+import { Provider as LocationProvider } from './src/context/LocationContext'
+import { Provider as TrackProvider } from './src/context/TrackContext'
+
+import { setNavigator } from './src/navigationRef'
+import RootNavigator from './createRouteNavigator';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
+    <TrackProvider>
+        <LocationProvider>
+          <AuthProvider>
+            <NavigationContainer  ref={(navigator) => setNavigator(navigator)} >
+             {/* <App ref={(navigator) => setNavigator(navigator)} /> */}
+             <RootNavigator />
+             </NavigationContainer>
+          </AuthProvider>
+        </LocationProvider>
+    </TrackProvider>
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+  )
+}
